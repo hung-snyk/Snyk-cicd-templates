@@ -1,0 +1,23 @@
+# snyk-ado-cli-caller.yml
+trigger:
+- manual
+
+pool:
+  vmImage: ubuntu-latest
+
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+steps:
+  - template:
+    parameters: snyk-ado-cli-template.yml
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
