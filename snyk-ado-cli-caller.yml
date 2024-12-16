@@ -2,9 +2,16 @@
 trigger:
 - manual
 
+# Example on calling template from another org which will required setup a server connection to that org repository
+# resources:
+#   repositories:
+#   - repository: ExternalTemplateRepo # alias for the repository defined in resources
+#     type: git
+#     name: OtherOrgProject/TemplateRepo  # Replace with the name of the repo in the other organization
+#     endpoint: OtherOrgServiceConnection  # Name of the service connection created earlier
+    
 pool:
   vmImage: ubuntu-latest
-
 
 steps:
 - task: NodeTool@0
