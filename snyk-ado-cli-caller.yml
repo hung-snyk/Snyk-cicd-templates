@@ -27,4 +27,4 @@ steps:
 steps:
   - template:
     parameters: snyk-ado-cli-template.yml
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      SNYK_TOKEN: $(SNYK_TOKEN)
