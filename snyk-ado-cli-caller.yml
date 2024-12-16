@@ -9,22 +9,26 @@ trigger:
 #     type: git
 #     name: OtherOrgProject/TemplateRepo  # Replace with the name of the repo in the other organization
 #     endpoint: OtherOrgServiceConnection  # Name of the service connection created earlier
-    
-pool:
-  vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+jobs:
+- job: BuildAndTest
+  pool:
+    vmImage: ubuntu-latest  # You can change this based on your requirements
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  steps:
+  # Install Node.js
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '20.x'   # Define the version of Node.js to install
+    displayName: 'Install Node.js'
 
-steps:
-  - template:
-    parameters: snyk-ado-cli-template.yml
-      SNYK_TOKEN: $(SNYK_TOKEN)
+  # Install dependencies and build
+  - script: |
+      npm install
+      npm run build
+    displayName: 'npm install and build'
+
+  # Reference the reusable Snyk template
+  - template: snyk-ado-cli-template.yml  # Reference the reusable template
+    parameters:
+      SNYK_TOKEN: $(SNYK_TOKEN)  # Pass the SNYK_TOKEN from the variable group
