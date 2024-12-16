@@ -1,26 +1,21 @@
-# snyk-ado-cli-caller.yml
-trigger:
-  - manual
+# snyk-ado-cli-template.yml
+parameters:
+  SNYK_TOKEN: ''         # Required token for Snyk authentication
+  SNYK_FLAGS: ''         # String parameter to pass additional flags to Snyk commands
 
-jobs:
-  - job: BuildAndTest
-    pool:
-      vmImage: ubuntu-latest # You can change this based on your requirements
+steps:
+# Only run snyk after the build steps
+- script: |
+    npm install -g snyk
+    snyk auth ${{ parameters.SNYK_TOKEN }}
+  displayName: 'npm install snyk and authenticate'
 
-    steps:
-      # Install Node.js
-      - task: NodeTool@0
-        inputs:
-          versionSpec: "20.x" # Define the version of Node.js to install
-        displayName: "Install Node.js"
+- script: |
+    snyk test $(SNYK_FLAGS)
+  displayName: 'snyk open source test'
+  continueOnError: true
 
-      # Install dependencies and build
-      - script: |
-          npm install
-          npm run build
-        displayName: "npm install and build"
-
-      # Reference the reusable Snyk template
-      - template: snyk-ado-cli-template.yml # Reference the reusable template
-        parameters:
-          SNYK_TOKEN: $(SNYK_TOKEN) # Pass the SNYK_TOKEN from the variable grou
+- script: |
+    snyk code test $(SNYK_FLAGS)
+  displayName: 'snyk code test'
+  continueOnError: true
