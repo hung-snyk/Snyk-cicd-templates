@@ -1,0 +1,22 @@
+default:
+  image: node:16
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - calling-snyk-template
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - npm ci
+
+include:
+  - project: 'hungqng/Snyk-cicd-templates' # accessible project
+    file: 'GitLab/snyk-gitlab-cli-template.yml' # template directory
+    
+snyk_cli_job:
+  stage: calling-snyk-template
+  extends: .snyk_cli # job name from the template
+  variables:
+    SNYK_FLAGS: "" # Pass custom Snyk flags
+  allow_failure: true
