@@ -1,0 +1,14 @@
+# snyk-gitlab-cli-template.yml
+.snyk_cli:
+  variables:
+    SNYK_FLAGS: "" # Default value for optional flags
+  script:
+    # Authenticate with Snyk
+    - npm install -g snyk
+    - snyk auth ${SNYK_TOKEN}
+
+    # Run Snyk open source test with optional flags
+    - snyk test ${SNYK_FLAGS}
+
+    # Run Snyk code test with optional flags
+    - snyk code test ${SNYK_FLAGS}
