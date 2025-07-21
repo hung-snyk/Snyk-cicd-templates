@@ -1,0 +1,21 @@
+image: node:18
+
+definitions:
+  steps:
+    - step: &snyk-scan-step
+        name: Snyk CLI Security Scan
+        caches:
+          - node
+        script:
+          - echo "Installing dependencies..."
+          - npm install -g snyk
+          - snyk auth $SNYK_TOKEN
+          - echo "Running Snyk code test..."
+          - snyk code test $SNYK_FLAG || true
+          - echo "Running Snyk open source test..."
+          - snyk test $SNYK_FLAG || true
+
+pipelines:
+  custom:
+    snyk-scan:
+      - step: *snyk-scan-step
