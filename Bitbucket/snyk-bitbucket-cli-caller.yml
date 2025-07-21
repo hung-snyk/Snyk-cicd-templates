@@ -1,0 +1,11 @@
+image: node:18
+
+pipelines:
+  custom:
+    build:
+      - step: &build-step
+        - script:
+          - npm install
+    snyk-check:
+      - step:
+          <<: *snyk-scan-step
