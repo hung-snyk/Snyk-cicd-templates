@@ -26,7 +26,7 @@ jobs:
       - name: Authenticate Snyk
         run: |
           export SNYK_TOKEN=${{ secrets.SNYK_TOKEN }}
-          snyk auth $SNYK_TOKEN --auth-type=token
+          snyk auth $SNYK_TOKEN
     
       - name: Run Snyk Code Test
         run: snyk code test
